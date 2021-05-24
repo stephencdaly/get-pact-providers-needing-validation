@@ -1,13 +1,24 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Pact provider tests'
+description: 'Run pact provider tests if pacts have changed'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  pact-broker-url:
+    description: URL of the pact broker
     required: true
-    default: '1000'
+  pact-broker-username:
+    description: Pact broker username
+    required: true
+  pact-broker-password:
+    description: Pact broker password
+    required: true
+  consumer:
+    description: The pact consumer
+    required: true
+  consumer-tag: 
+    description: The tag for consumer pact file to check for providers needing validation against
+    required: true
 outputs:
-  time: # output will be available to future steps
-    description: 'The message to output'
+  providers-needing-validation:
+    description: 'List of providers needing validation against consumer version'
 runs:
   using: 'node12'
   main: 'dist/index.js'

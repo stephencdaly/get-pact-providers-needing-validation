@@ -1,18 +1,31 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const { canDeploy } = require('@pact-foundation/pact')
 
-
-// most @actions toolkit packages have async methods
-async function run() {
+async function run () {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const pactBroker = core.getInput('pact-broker-url')
+    const pactBrokerUsername = core.getInput('pact-broker-username')
+    const pactBrokerPassword = core.getInput('pact-broker-password')
+    const consumer = core.getInput('consumer')
+    const consumerTag = core.getInput('consumer-tag')
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    core.setSecret(pactBrokerUsername)
+    core.setSecret(pactBrokerPassword)
 
-    core.setOutput('time', new Date().toTimeString());
+    core.info(`Checking whether consumer ${consumer} can be deployed`);
+
+    const opts = {
+      pactBroker,
+      pactBrokerUsername,
+      pactBrokerPassword,
+      participant: consumer,
+      participantVersion: consumerTag
+    }
+    const result = await canDeploy(opts)
+
+    core.info(`Result: ${JSON.stringify(result)}`)
+
+    core.setOutput('providers-needing-validation', result);
   } catch (error) {
     core.setFailed(error.message);
   }
