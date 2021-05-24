@@ -18,11 +18,12 @@ async function run () {
       pactBroker,
       pactBrokerUsername,
       pactBrokerPassword,
-      participants: [{
+      pacticipants: [{
         name: consumer,
         version: consumerTag
       }]
     }
+    core.info(`Options: ${JSON.stringify(opts)}`)
     const result = await canDeploy(opts)
 
     core.info(`Result: ${JSON.stringify(result)}`)
