@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { canDeploy } = require('@pact-foundation/pact')
+const { canDeploy } = require('@pact-foundation/pact-node')
 
 async function run () {
   try {
@@ -18,8 +18,10 @@ async function run () {
       pactBroker,
       pactBrokerUsername,
       pactBrokerPassword,
-      participant: consumer,
-      participantVersion: consumerTag
+      participants: [{
+        name: consumer,
+        version: consumerTag
+      }]
     }
     const result = await canDeploy(opts)
 

@@ -26,7 +26,7 @@
   "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.5",
-    "@pact-foundation/pact": "^9.15.5"
+    "@pact-foundation/pact-node": "^10.12.2"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.27.0",
