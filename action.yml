@@ -1,5 +1,5 @@
-name: 'Pact provider tests'
-description: 'Run pact provider tests if pacts have changed'
+name: 'Check pact providers'
+description: 'Check which pact providers we need to run provider pact tests for, for the given consumer version'
 inputs:
   pact-broker-url:
     description: URL of the pact broker
@@ -20,5 +20,11 @@ outputs:
   providers-needing-validation:
     description: 'List of providers needing validation against consumer version'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.pact-broker-url }}
+    - ${{ inputs.pact-broker-username }}
+    - ${{ inputs.pact-broker-password }}
+    - ${{ inputs.consumer }}
+    - ${{ inputs.consumer-tag }}
